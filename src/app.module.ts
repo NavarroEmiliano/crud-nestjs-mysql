@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { CatsModule } from './cats/cats.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { BreedsModule } from './breeds/breeds.module';
 
 @Module({
-  imports: [CatsModule,
+  imports: [
+    CatsModule,
+    BreedsModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
