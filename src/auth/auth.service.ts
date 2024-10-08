@@ -1,4 +1,8 @@
-import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
@@ -7,7 +11,10 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService, private readonly jwtService: JwtService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async register(registerDto: RegisterDto) {
     const userFound = await this.usersService.findOneByEmail(registerDto.email);
@@ -25,16 +32,21 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const userFound = await this.usersService.findOneByEmail(loginDto.email);
 
-    if(!userFound){
-      throw new UnauthorizedException('email or password is wrong')
+    if (!userFound) {
+      throw new UnauthorizedException('email or password is wrong');
     }
-    const isPasswordValid = await bcrypt.compare(userFound.password,loginDto.password)
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.password,
+      userFound.password,
+    );
 
-    if(!isPasswordValid) {
-      throw new UnauthorizedException('password is wrong')
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('password is wrong');
     }
 
-    const payload = await {}
-    return;
+    const payload = { email: userFound.email };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 }
