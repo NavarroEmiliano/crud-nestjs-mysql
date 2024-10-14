@@ -26,22 +26,26 @@ export class CatsController {
   }
 
   @Get()
-  findAll() {
+  findAll(@ActiveUser() user: UserPayload) {
     return this.catsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string, @ActiveUser() user: UserPayload) {
     return this.catsService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateCatDto: UpdateCatDto,
+    @ActiveUser() user: UserPayload,
+  ) {
     return this.catsService.update(+id, updateCatDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string, @ActiveUser() user: UserPayload) {
     return this.catsService.remove(+id);
   }
 }
