@@ -4,7 +4,8 @@ import { UpdateCatDto } from './dto/update-cat.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cat } from './entities/cat.entity';
 import { Repository } from 'typeorm';
-import { Breed } from 'src/breeds/entities/breed.entity';
+import { Breed } from '../breeds/entities/breed.entity';
+import { UserPayload } from '../common/types/userPayload.type';
 
 @Injectable()
 export class CatsService {
@@ -13,7 +14,7 @@ export class CatsService {
     @InjectRepository(Breed) private breedsRepository: Repository<Breed>,
   ) {}
 
-  async create(createCatDto: CreateCatDto) {
+  async create(createCatDto: CreateCatDto, user: UserPayload) {
     const breed = await this.breedsRepository.findOneBy({
       name: createCatDto.breed,
     });
@@ -25,6 +26,7 @@ export class CatsService {
     const cat = this.catsRepository.create({
       ...createCatDto,
       breed,
+      userEmail: user.email,
     });
     return await this.catsRepository.save(cat);
   }

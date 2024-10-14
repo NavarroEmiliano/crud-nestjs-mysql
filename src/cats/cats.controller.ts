@@ -12,6 +12,8 @@ import { CreateCatDto } from './dto/create-cat.dto';
 import { UpdateCatDto } from './dto/update-cat.dto';
 import { Role } from '../common/enums/rol.enum';
 import { Auth } from '../common/decorators/auth.decorator';
+import { ActiveUser } from '../common/decorators/active-user.decorator';
+import { UserPayload } from '../common/types/userPayload.type';
 
 @Auth(Role.USER)
 @Controller('cats')
@@ -19,8 +21,8 @@ export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
   @Post()
-  create(@Body() createCatDto: CreateCatDto) {
-    return this.catsService.create(createCatDto);
+  create(@Body() createCatDto: CreateCatDto, @ActiveUser() user: UserPayload) {
+    return this.catsService.create(createCatDto, user);
   }
 
   @Get()
