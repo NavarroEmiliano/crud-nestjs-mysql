@@ -7,18 +7,27 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     return await this.userRepository.save(createUserDto);
   }
 
   async findOneByEmail(email: string) {
-    return await this.userRepository.findOneBy({email})
+    return await this.userRepository.findOneBy({ email });
+  }
+
+  async findOneByEmailWithPassword(email: string) {
+    return await this.userRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'name', 'password', 'role'],
+    });
   }
 
   async findAll() {
-    return await this.userRepository.find()
+    return await this.userRepository.find();
   }
 
   findOne(id: number) {

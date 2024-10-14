@@ -24,15 +24,10 @@ export class AuthService {
       throw new ConflictException('user already exists');
     }
 
-    await this.usersService.create({
+    return await this.usersService.create({
       ...registerDto,
       password: await bcrypt.hash(registerDto.password, await bcrypt.genSalt()),
     });
-
-    return {
-      name: registerDto.name,
-      email: registerDto.email,
-    };
   }
 
   async login(loginDto: LoginDto) {
@@ -57,10 +52,6 @@ export class AuthService {
   }
 
   async profile(user: UserPayload) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...userWithoutPassword } = await this.usersService.findOneByEmail(
-      user.email,
-    );
-    return userWithoutPassword;
+    return await this.usersService.findOneByEmail(user.email);
   }
 }
