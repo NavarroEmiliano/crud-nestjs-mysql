@@ -31,7 +31,9 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
-    const userFound = await this.usersService.findOneByEmail(loginDto.email);
+    const userFound = await this.usersService.findByEmailWithPassword(
+      loginDto.email,
+    );
 
     if (!userFound) {
       throw new UnauthorizedException('email or password is wrong');
@@ -48,6 +50,7 @@ export class AuthService {
     const payload = { email: userFound.email, role: userFound.role };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      email: userFound.email,
     };
   }
 
