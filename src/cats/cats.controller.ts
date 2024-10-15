@@ -37,15 +37,15 @@ export class CatsController {
 
   @Patch(':id')
   update(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateCatDto: UpdateCatDto,
     @ActiveUser() user: UserPayload,
   ) {
-    return this.catsService.update(+id, updateCatDto);
+    return this.catsService.update(id, updateCatDto, user);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @ActiveUser() user: UserPayload) {
-    return this.catsService.remove(+id);
+  remove(@Param('id') id: number, @ActiveUser() user: UserPayload) {
+    return this.catsService.remove(id, user);
   }
 }

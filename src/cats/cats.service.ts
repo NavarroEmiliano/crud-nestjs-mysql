@@ -46,32 +46,20 @@ export class CatsService {
     return cat;
   }
 
-  async update(id: number, updateCatDto: UpdateCatDto) {
-    const cat = await this.catsRepository.findOne({ where: { id } });
-    if (!cat) {
-      throw new BadRequestException('Cat not found');
-    }
-
-    if (updateCatDto.breed) {
-      const breed = await this.breedsRepository.findOneBy({
-        name: updateCatDto.breed,
-      });
-      if (!breed) {
-        throw new BadRequestException('Breed not found');
-      }
-      cat.breed = breed;
-    }
-
-    Object.assign(cat, updateCatDto);
-    return await this.catsRepository.save(cat);
+  async update(id: number, updateCatDto: UpdateCatDto, user: UserPayload) {
+    await this.findOne(id, user);
+    return await this.catsRepository.update(id, {
+      ...updateCatDto,
+      breed: updateCatDto.breed
+        ? await this.validateBreed(updateCatDto.breed)
+        : undefined,
+      userEmail: user.email,
+    });
   }
 
-  async remove(id: number) {
-    const result = await this.catsRepository.softDelete(id);
-    if (result.affected === 0) {
-      throw new BadRequestException('Gato no encontrado');
-    }
-    return { message: 'Gato eliminado con éxito' };
+  async remove(id: number, user: UserPayload) {
+    await this.findOne(id, user);
+    return await this.catsRepository.softDelete(id);
   }
 
   private validateOwnership(cat: Cat, user: UserPayload) {
