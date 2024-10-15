@@ -27,12 +27,12 @@ export class CatsController {
 
   @Get()
   findAll(@ActiveUser() user: UserPayload) {
-    return this.catsService.findAll();
+    return this.catsService.findAll(user);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @ActiveUser() user: UserPayload) {
-    return this.catsService.findOne(+id);
+  findOne(@Param('id') id: number, @ActiveUser() user: UserPayload) {
+    return this.catsService.findOne(id, user);
   }
 
   @Patch(':id')
