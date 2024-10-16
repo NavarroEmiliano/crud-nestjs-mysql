@@ -12,7 +12,9 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    return await this.userRepository.save(createUserDto);
+    const user = await this.userRepository.save(createUserDto);
+    delete user.password;
+    return user;
   }
 
   async findOneByEmail(email: string) {
