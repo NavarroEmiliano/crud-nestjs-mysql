@@ -36,11 +36,14 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
+  update(id: number, updateUserDto: UpdateUserDto) {}
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const userFound = await this.userRepository.findOne({ where: { id } });
+
+    if (!userFound) {
+      throw new Error('User not found');
+    }
+    return await this.userRepository.softDelete(id);
   }
 }
