@@ -14,8 +14,10 @@ import { Role } from '../common/enums/rol.enum';
 import { Auth } from '../common/decorators/auth.decorator';
 import { ActiveUser } from '../common/decorators/active-user.decorator';
 import { UserPayload } from '../common/types/userPayload.type';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Auth(Role.USER)
+@ApiBearerAuth()
 @Controller('cats')
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
