@@ -7,7 +7,9 @@ import { Breed } from './entities/breed.entity';
 
 @Injectable()
 export class BreedsService {
-  constructor(@InjectRepository(Breed) private breedsRepository: Repository<Breed>) {}
+  constructor(
+    @InjectRepository(Breed) private breedsRepository: Repository<Breed>,
+  ) {}
 
   async create(createBreedDto: CreateBreedDto) {
     return await this.breedsRepository.save(createBreedDto);
