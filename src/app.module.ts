@@ -19,7 +19,7 @@ import { ConfigModule } from '@nestjs/config';
       port: Number(process.env.POSTGRES_PORT),
       username: process.env.POSTGRES_USERNAME,
       password: process.env.POSTGRES_PASSWORD,
-      database: process.env.DATABASE,
+      database: process.env.POSTGRES_DATABASE,
       autoLoadEntities: true,
       synchronize: true,
       ssl: process.env.POSTGRES_SSL === 'true',
