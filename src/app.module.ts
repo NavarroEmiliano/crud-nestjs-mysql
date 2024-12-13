@@ -22,6 +22,15 @@ import { ConfigModule } from '@nestjs/config';
       database: process.env.DATABASE,
       autoLoadEntities: true,
       synchronize: true,
+      ssl: process.env.POSTGRES_SSL === 'true',
+      extra: {
+        ssl:
+          process.env.POSTGRES_SSL === 'true'
+            ? {
+                rejectUnauthorized: false,
+              }
+            : null,
+      },
     }),
   ],
   controllers: [],
